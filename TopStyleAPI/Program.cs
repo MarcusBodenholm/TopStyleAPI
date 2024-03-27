@@ -3,7 +3,11 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using TopStyleAPI.Core.Interfaces;
+using TopStyleAPI.Core.Services;
 using TopStyleAPI.Data;
+using TopStyleAPI.Data.Interfaces;
+using TopStyleAPI.Data.Repos;
 using TopStyleAPI.Domain.Entities;
 using TopStyleAPI.ExceptionHandler;
 
@@ -19,9 +23,14 @@ builder.Services.AddDbContext<TopStyleDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 
 });
-builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+builder.Services.AddIdentity<Customer, IdentityRole>(options =>
 {
+    options.Password.RequireDigit = true;
+    options.Password.RequireUppercase = false;
+    options.Password.RequireLowercase = false;
+    options.Password.RequireNonAlphanumeric = false;
     options.Password.RequiredUniqueChars = 0;
+    options.User.RequireUniqueEmail = true;
 
 })
     .AddEntityFrameworkStores<TopStyleDbContext>()
@@ -46,6 +55,8 @@ builder.Services.AddAuthentication(auth =>
     };
 });
 
+builder.Services.AddScoped<IProductRepo, ProductRepo>();
+builder.Services.AddScoped<IProductService, ProductService>();
 
 var app = builder.Build();
 app.ConfigureExceptionHandler();
