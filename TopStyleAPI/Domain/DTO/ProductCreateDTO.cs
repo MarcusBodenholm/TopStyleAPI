@@ -12,5 +12,7 @@ namespace TopStyleAPI.Domain.DTO
         public string Description { get; set; }
         [Required(ErrorMessage = "Price is a required field.")]
         public int Price { get; set; }
+        [Required(ErrorMessage = "CategoryID is a required field.")]
+        public int CategoryID { get; set; }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace TopStyleAPI.Domain.Entities
 {
@@ -12,6 +13,8 @@ namespace TopStyleAPI.Domain.Entities
         public string Description { get; set; }
         public int Price { get; set; }
         public virtual Category Category { get; set; }
+        [JsonIgnore]
+
         public virtual List<Order> Orders { get; set; }
     }
 }

@@ -1,12 +1,13 @@
 ﻿using Microsoft.AspNetCore.Diagnostics;
 using TopStyleAPI.ExceptionHandler.ErrorModel;
 using TopStyleAPI.ExceptionHandler.Exceptions;
+using TopStyleAPI.Logger.Interfaces;
 
 namespace TopStyleAPI.ExceptionHandler
 {
     public static class ExceptionMiddlewareExtensions
     {
-        public static void ConfigureExceptionHandler(this WebApplication app)
+        public static void ConfigureExceptionHandler(this WebApplication app, ILoggerManager logger)
         {
             app.UseExceptionHandler(appError =>
             {
@@ -16,6 +17,7 @@ namespace TopStyleAPI.ExceptionHandler
                     var contextFeature = context.Features.Get<IExceptionHandlerFeature>();
                     if (contextFeature != null)
                     {
+                        logger.LogError($"Somethign went wrong: {contextFeature.Error}");
                         context.Response.StatusCode = contextFeature.Error switch
                         {
                             NotFoundException => StatusCodes.Status404NotFound,

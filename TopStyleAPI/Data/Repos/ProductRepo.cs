@@ -16,7 +16,16 @@ namespace TopStyleAPI.Data.Repos
 
         public async Task<List<Product>> GetAllProducts()
         {
-            var result = await _dbContext.Products.ToListAsync();
+            var result = await _dbContext.Products.Include(p => p.Category).AsNoTracking().ToListAsync();
+            return result;
+        }
+        public async Task<List<Product>> GetAllProductsByCategory(string name)
+        {
+            var result = await _dbContext.Products
+                .Include(p => p.Category)
+                .AsNoTracking()
+                .Where(p => p.Category.CategoryName.ToLower() == name.ToLower())
+                .ToListAsync();
             return result;
         }
         public async Task AddProduct(Product product)
