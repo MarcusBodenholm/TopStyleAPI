@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.IdentityModel.Tokens;
 using System.Security.Claims;
 using TopStyleAPI.Core.Interfaces;
+using TopStyleAPI.Domain.DTO;
 
 namespace TopStyleAPI.Controllers
 {
@@ -19,14 +20,27 @@ namespace TopStyleAPI.Controllers
         {
             _userService = userService;
         }
-
         [HttpGet]
         [Authorize]
-        public async Task<IActionResult> GetStuff()
+        public async Task<IActionResult> GetUserDetails()
         {
-            var result = await _userService.GetName();
+            var result = await _userService.GetUserDetails();
             return Ok(result);
-    }
-
+        }
+        [HttpPut]
+        [Authorize]
+        public async Task<IActionResult> UpdateUser(UserUpdateDTO updated)
+        {
+            await _userService.UpdateUser(updated);
+            return Ok("User has been updated.");
+        }
+        [HttpDelete]
+        [Authorize]
+        public async Task<IActionResult> DeleteUser([FromHeader(Name = "Authorization")] string authorization)
+        {
+            if (string.IsNullOrWhiteSpace(authorization)) return BadRequest();
+            await _userService.DeleteUser(authorization);
+            return Ok("User deleted.");
+        }
     }
 }

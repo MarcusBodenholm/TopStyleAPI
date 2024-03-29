@@ -9,6 +9,7 @@ namespace TopStyleAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ProductController : ControllerBase
     {
         private readonly IProductService _productService;
@@ -21,22 +22,29 @@ namespace TopStyleAPI.Controllers
         }
 
         [HttpGet]
-        [Authorize]
         public async Task<IActionResult> GetAllProduct()
         {
             var result = await _productService.GetAllProducts();
             return Ok(result);
         }
         [HttpGet]
-        [Route("/api/[controller]/{category}")]
+        [Route("{category}")]
         public async Task<IActionResult> GetProductsByCategory(string category)
         {
             if (category == null) return BadRequest("Category missing.");
             var result = await _productService.GetAllProductsByCategory(category);
             return Ok(result);
         }
+        [HttpGet]
+        [Route("search/{search}")]
+        public async Task<IActionResult> ProductSearch(string search)
+        {
+            if (search == null) return BadRequest("Search term missing");
+            var result = await _productService.SearchProducts(search);
+            return Ok(result);
+        }
         [HttpPost]
-        [Route("/api/[controller]/add-product")]
+        [Route("add-product")]
         public async Task<IActionResult> AddProduct(ProductCreateDTO product)
         {
             if (product == null) return BadRequest();

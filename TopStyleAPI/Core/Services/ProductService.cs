@@ -32,6 +32,13 @@ namespace TopStyleAPI.Core.Services
             var result = products.Select(p => _mapper.Map<ProductDTO>(p)).ToList();
             return result;
         }
+        public async Task<List<ProductDTO>> SearchProducts(string search)
+        {
+            var products = await _productRepo.SearchProducts(search);
+            var result = products.Select(p => _mapper.Map<ProductDTO>(p)).ToList();
+            return result;
+        }
+
         public async Task<ProductDTO> AddProduct(ProductCreateDTO product)
         {
             Category? category = await _categoryRepo.GetCategoryById(product.CategoryID, true);

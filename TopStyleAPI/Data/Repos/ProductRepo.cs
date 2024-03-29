@@ -28,6 +28,17 @@ namespace TopStyleAPI.Data.Repos
                 .ToListAsync();
             return result;
         }
+        public async Task<List<Product>> SearchProducts(string search)
+        {
+            var result = await _dbContext.Products
+                .Include(p => p.Category)
+                .AsNoTracking()
+                .Where(p => p.Title.ToLower() == search.ToLower() ||
+                            p.Description.ToLower() == search.ToLower())
+                .ToListAsync();
+            return result;
+        }
+
         public async Task AddProduct(Product product)
         {
             _dbContext.Products.Add(product);

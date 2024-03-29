@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
+using TopStyleAPI.Core.Authorization.Interface;
+using TopStyleAPI.Core.Authorization.TokenLifeTimeManager;
 using TopStyleAPI.Core.Interfaces;
 using TopStyleAPI.Core.Services;
 using TopStyleAPI.Data;
@@ -25,6 +27,7 @@ namespace TopStyleAPI.ServicesExtensions
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddSingleton<ITokenLifeTimeManager, JwtTokenLifeTimeManager>();
         }
         public static void ConfigureIdentity(this IServiceCollection services)
         {
@@ -44,6 +47,7 @@ namespace TopStyleAPI.ServicesExtensions
         }
         public static void ConfigureJWT(this IServiceCollection services, IConfiguration configuration)
         {
+            var tokenLifeTimeManager = new JwtTokenLifeTimeManager();
             var jwtSettings = configuration.GetSection("JwtSettings");
             var secret = jwtSettings["secret"];
             services.AddAuthentication(auth =>
@@ -61,7 +65,7 @@ namespace TopStyleAPI.ServicesExtensions
                     RequireExpirationTime = true,
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret)),
                     ValidateIssuerSigningKey = true,
-
+                    LifetimeValidator = tokenLifeTimeManager.ValidateTokenLifeTime
                 };
             });
 
