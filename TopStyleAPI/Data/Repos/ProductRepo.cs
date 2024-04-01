@@ -33,8 +33,8 @@ namespace TopStyleAPI.Data.Repos
             var result = await _dbContext.Products
                 .Include(p => p.Category)
                 .AsNoTracking()
-                .Where(p => p.Title.ToLower() == search.ToLower() ||
-                            p.Description.ToLower() == search.ToLower())
+                .Where(p => p.Title.ToLower().Contains(search.ToLower()) ||
+                            p.Description.ToLower().Contains(search.ToLower()))
                 .ToListAsync();
             return result;
         }
@@ -44,6 +44,26 @@ namespace TopStyleAPI.Data.Repos
             _dbContext.Products.Add(product);
             await _dbContext.SaveChangesAsync();
         }
-        
+        public async Task<Product?> GetProductByIdAsync(int id, bool tracking)
+        {
+            var result = tracking ?
+                await _dbContext.Products
+                .SingleOrDefaultAsync(p => p.ProductID == id) :
+                await _dbContext.Products
+                .AsNoTracking()
+                .SingleOrDefaultAsync(p => p.ProductID == id);
+            return result;
+        }
+        public Product? GetProductById(int id, bool tracking)
+        {
+            var result = tracking ?
+                _dbContext.Products
+                .SingleOrDefault(p => p.ProductID == id) :
+                _dbContext.Products
+                .AsNoTracking()
+                .SingleOrDefault(p => p.ProductID == id);
+            return result;
+        }
+
     }
 }

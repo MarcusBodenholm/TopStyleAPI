@@ -22,6 +22,7 @@ namespace TopStyleAPI.ExceptionHandler
                         {
                             NotFoundException => StatusCodes.Status404NotFound,
                             UnauthorizedException => StatusCodes.Status401Unauthorized,
+                            UnauthorizedAccessException => StatusCodes.Status401Unauthorized,
                             _ => StatusCodes.Status500InternalServerError
                         };
                         await context.Response.WriteAsync(new ErrorDetails()

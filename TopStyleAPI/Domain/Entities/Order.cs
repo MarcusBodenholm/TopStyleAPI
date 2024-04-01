@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace TopStyleAPI.Domain.Entities
 {
@@ -9,8 +10,9 @@ namespace TopStyleAPI.Domain.Entities
         [Required]
         public DateTime OrderCreated {  get; set; }
         public double OrderTotal { get; set; }
-
+        [JsonIgnore]
         public virtual Customer Customer { get; set; }
+        [JsonIgnore]
         public virtual List<Product> Products { get; set; }
     }
 }

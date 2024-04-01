@@ -25,6 +25,8 @@ namespace TopStyleAPI.ServicesExtensions
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<ICategoryRepo, CategoryRepo>();
             services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<IOrderRepo, OrderRepo>();
+            services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<IUserService, UserService>();
             services.AddSingleton<ITokenLifeTimeManager, JwtTokenLifeTimeManager>();

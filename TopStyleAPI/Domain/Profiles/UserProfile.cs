@@ -29,5 +29,20 @@ namespace TopStyleAPI.Domain.Profiles
 
         }
     }
-
+    public class OrderProfile : Profile
+    {
+        public OrderProfile()
+        {
+            CreateMap<Order, OrderDTO>()
+                .ForMember(dest => dest.OrderID,
+                o => o.MapFrom(src => src.OrderID))
+                .ForMember(dest => dest.OrderCreated,
+                o => o.MapFrom(src => src.OrderCreated))
+                .ForMember(dest => dest.OrderTotal,
+                o => o.MapFrom(src => src.OrderTotal))
+                .ForMember(dest => dest.CustomerName,
+                o => o.MapFrom(src => src.Customer.UserName))
+                .ForMember(dest => dest.CustomerEmail,
+                o => o.MapFrom(src => src.Customer.Email));        }
+    }
 }
