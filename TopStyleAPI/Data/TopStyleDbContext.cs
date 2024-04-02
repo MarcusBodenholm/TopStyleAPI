@@ -19,7 +19,7 @@ namespace TopStyleAPI.Data
             builder.Entity<Order>()
                 .HasOne(o => o.Customer)
                 .WithMany(o => o.Orders)
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.Cascade);
             builder.Entity<Category>()
                 .HasMany(c => c.Products)
                 .WithOne(p => p.Category)

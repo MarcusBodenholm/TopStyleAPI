@@ -33,7 +33,8 @@ namespace TopStyleAPI.Core.Services
             var result = await _userManager.CreateAsync(user, userForRegistration.Password);
             if (result.Succeeded)
             {
-                await _userManager.AddToRolesAsync(user, userForRegistration.Roles);
+                var roles = new string[] { "Customer" };
+                await _userManager.AddToRolesAsync(user, roles);
             }
             return result;
         }
